@@ -1,18 +1,26 @@
 package main
 
 import (
-	"fmt"
-	routeModule "github.com/lucascmreis/codelivery/gps-simulator/app/route"
+	"log"
+
+	"github.com/joho/godotenv"
+	"github.com/lucascmreis/codelivery/gps-simulator/infra/kafka"
 )
 
-// func init() {
-// 	err := godotenv.Load()
-// 	if err != nil {
-// 		log.Fatal("error loading .env file")
-// 	}
-// }
+func init() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("error loading .env file")
+	}
+}
 
 func main() {
+	producer := kafka.NewKafkaProducer()
+	kafka.Publish("oie", "readtest", producer)
+
+	for{
+		_=1
+	}
 	// msgChan := make(chan *ckafka.Message)
 	// consumer := kafka.NewKafkaConsumer(msgChan)
 	// go consumer.Consume()
@@ -20,13 +28,4 @@ func main() {
 	// 	fmt.Println(string(msg.Value))
 	// 	go kafka2.Produce(msg)
 	// }
-
-	route := routeModule.Route{
-		ID: "1",
-		ClientID: "1",
-	}
-
-	route.LoadPositions()
-	stringjson, _ := route.ExportJsonPositions()
-	fmt.Println(stringjson[0])
 }
